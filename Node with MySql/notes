@@ -1,0 +1,15 @@
+-> base.hbs - #10 pageukum comman a html template podanumna ithula podalamm na athu ithula potukalam
+-> express-handler - // template engine - render html pages by getting data from server
+-> // used to render html and css i.e make changes in the html and css
+-> body-parser ://to get json data
+-> views folder la aditional page create pannanum na athula panikalam
+-> dotenv - oru data va comman a vachu kithu atha eppa venalum use panikilam eg database
+-> controllers is used to implement logics and routers is to implement then throught the web pages
+-> to select all rows from database to html so we use "each" which will act as loop
+
+->instead of using dotenv in our code  to get data from .env we can add --env-file=.env
+-> instaed of using third party npm module we can add in scripts in json file 'dev':'node --watch server.js'
+->params is basically used in dynamic routing (/home:id)  we can get that by req.params.id
+->parseInt() is used to convert string to whole number 
+-> filter is used to search the id in the params in obj - obj_name.filter((obj_name) => post.id === id0)
+-> 
