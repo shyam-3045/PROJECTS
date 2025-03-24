@@ -1,0 +1,310 @@
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+/* Header Styles */
+.header {
+  background-color: #f0f4f8;
+  padding: 20px 30px;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 28px;
+}
+
+.header p {
+  margin: 5px 0 0;
+  color: #7f8c8d;
+}
+
+/* Dashboard Container */
+.dashboard-container {
+  display: flex;
+  padding: 0 20px;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 250px;
+  min-width: 250px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  margin-right: 20px;
+  height: fit-content;
+}
+
+.patient-info {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.patient-info h3 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  color: #2c3e50;
+}
+
+.patient-info p {
+  margin: 5px 0;
+  color: #7f8c8d;
+  font-size: 14px;
+}
+
+.billing-summary {
+  margin-top: 20px;
+}
+
+.billing-summary h4 {
+  margin: 0 0 15px;
+  font-size: 16px;
+  color: #2c3e50;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.amount {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+/* Main Content Styles */
+.main-content {
+  flex: 1;
+}
+
+.action-buttons {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+/* Tabs Styles */
+.billing-tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-right: 5px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s;
+}
+
+.tab:hover {
+  background-color: #f8f9fa;
+}
+
+.tab.active {
+  border-bottom: 3px solid #007bff;
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* Bill Card Styles */
+.billing-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bill-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.bill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+
+.bill-id {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.bill-status {
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.status-due {
+  background-color: #e5f6fd;
+  color: #0288d1;
+}
+
+.status-overdue {
+  background-color: #ffebee;
+  color: #e53935;
+}
+
+.status-paid {
+  background-color: #e8f5e9;
+  color: #43a047;
+}
+
+.status-processing {
+  background-color: #fff8e1;
+  color: #ffa000;
+}
+
+.bill-details {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.bill-detail {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-label {
+  font-size: 12px;
+  color: #95a5a6;
+  margin-bottom: 5px;
+}
+
+.detail-value {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.bill-services {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.service-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.service-item:last-child {
+  border-bottom: none;
+}
+
+.service-item.subtotal {
+  border-top: 1px solid #eee;
+  margin-top: 5px;
+  padding-top: 15px;
+  font-style: italic;
+}
+
+.service-item.total {
+  font-weight: bold;
+  border-top: 1px solid #eee;
+  margin-top: 5px;
+  padding-top: 15px;
+  font-size: 16px;
+}
+
+.bill-actions {
+  padding: 15px 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* Claim Status Timeline */
+.claim-status {
+  padding: 20px;
+  border-top: 1px solid #eee;
+}
+
+.status-timeline {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0 0;
+  position: relative;
+}
+
+.status-timeline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 7px;
+  width: 2px;
+  background-color: #eee;
+  z-index: 1;
+}
+
+.status-timeline li {
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 15px;
+  z-index: 2;
+}
+
+.status-dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #eee;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px #eee;
+}
+
+.status-complete .status-dot {
+  background-color: #43a047;
+  box-shadow: 0 0 0 2px #e8f5e9;
+}
+
+.status-current .status-dot {
+  background-color: #ffa000;
+  box-shadow: 0 0 0 2px #fff8e1;
+}
+
+.status-text {
+  font-size: 14px;
+  color: #7f8c8d;
+}
+
+.status-complete .status-text {
+  color: #2c3e50;
+}
+
+.status-current .status-text {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+/* Utility Classes */
+.hidden {
+  display: none;
+}

@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --secondary: #6b7280;
+            --light: #f3f4f6;
+            --dark: #1f2937;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: var(--dark);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-left: 10px;
+        }
+
+        .menu {
+            padding: 20px 0;
+        }
+
+        .menu-title {
+            padding: 10px 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--secondary);
+            letter-spacing: 1px;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .menu-item.active {
+            background-color: var(--gray-100);
+            border-left: 4px solid var(--primary);
+        }
+
+        .menu-item:hover {
+            background-color: var(--gray-100);
+        }
+
+        .menu-item i {
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+
+        .menu-item.active i {
+            color: var(--primary);
+        }
+
+        .menu-text {
+            font-size: 14px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .notifications {
+            margin-right: 20px;
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Cards row */
+        .cards-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .stat-card {
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .icon-patients {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+
+        .icon-appointments {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .icon-surgery {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .icon-revenue {
+            background-color: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+
+        .stat-info h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            color: var(--secondary);
+            font-size: 14px;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .section-action {
+            color: var(--primary);
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Table */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: var(--gray-100);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        th {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--secondary);
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background-color: var(--gray-100);
+        }
+
+        .status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-confirmed {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-pending {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .status-cancelled {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--gray-300);
+        }
+
+        /* Calendar and Patient Info */
+        .split-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .calendar {
+            height: 300px;
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-template-rows: auto repeat(5, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-header {
+            grid-column: span 7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-day {
+            text-align: center;
+            padding: 5px;
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--secondary);
+        }
+
+        .calendar-date {
+            text-align: center;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .calendar-date:hover {
+            background-color: var(--gray-100);
+        }
+
+        .calendar-date.current {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .calendar-date.has-event {
+            position: relative;
+        }
+
+        .calendar-date.has-event::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: var(--primary);
+        }
+
+        /* Patient Info */
+        .patient-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .patient-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+
+        .patient-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .patient-details {
+            color: var(--secondary);
+            font-size: 12px;
+        }
+        
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Page Title Update */
+        #pageTitle {
+            transition: all 0.3s ease;
+        }
+        .profile-section {
+        padding: 20px 0;
+    }
+    
+    .profile-info-row {
+        display: flex;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .profile-info-row:last-child {
+        border-bottom: none;
+    }
+    
+    .profile-label {
+        width: 150px;
+        font-weight: 600;
+        color: var(--dark);
+    }
+    
+    .profile-value {
+        flex: 1;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--gray-300);
+        border-radius: 4px;
+        font-size: 14px;
+    }
+    
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+        
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            
+            .split-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <i class="logo">PRS HOSPITALS</i>
+            </div>
+            <div class="menu">
+                <div class="menu-title">Main Menu</div>
+                <div class="menu-item active" data-tab="dashboard">
+                    <i>📊</i>
+                    <span class="menu-text">Dashboard</span>
+                </div>
+                <div class="menu-item" data-tab="patients">
+                    <i>👥</i>
+                    <span class="menu-text">Patients</span>
+                </div>
+                <div class="menu-item" data-tab="appointments">
+                    <i>📅</i>
+                    <span class="menu-text">Appointments</span>
+                </div>
+                <div class="menu-item" data-tab="records">
+                    <i>📝</i>
+                    <span class="menu-text">Medical Records</span>
+                </div>
+                
+
+                <div class="menu-title">Settings</div>
+                <div class="menu-item" data-tab="profile">
+                    <i>👤</i>
+                    <span class="menu-text">Profile</span>
+                </div>
+                <div class="menu-item" id="logout">
+                    <i>📤</i>
+                    <a href="/logout">
+                        
+                    
+                        <span class="menu-text">Logout</span>
+
+                    </a>
+                    
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                <div class="user-profile">
+                    <div class="notifications">
+                        <i>🔔</i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="user-avatar">DR</div>
+                    <div>{{this.user.name}}</div>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="tab-content active" id="dashboard-content">
+                <!-- Stats Cards -->
+                <div class="cards-row">
+                    <div class="card stat-card">
+                        <div class="stat-icon icon-patients">👥</div>
+                        <div class="stat-info">
+                            <h3>12</h3>
+                            <p>Total Patients</p>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon icon-appointments">📅</div>
+                        <div class="stat-info">
+                            <h3>12</h3>
+                            <p>Today's Appointments</p>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon icon-surgery">🔪</div>
+                        <div class="stat-info">
+                            <h3>3</h3>
+                            <p>Pending Surgeries</p>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon icon-revenue">💰</div>
+                        <div class="stat-info">
+                            <h3>$8.5k</h3>
+                            <p>Weekly Revenue</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Appointments -->
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Upcoming Appointments</h2>
+                    </div>
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td>Appointment ID</td>
+                                        <td>Patient Name</td>
+                                        <td>Appointment Type</td>
+                                        <td>Date</td>
+                                        <td>Time</td>
+                                        <td>Reason</td>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <{{#each result2}}
+                                            <tr>
+                                            <td>{{this.Appointment_ID}}</td>
+                                            <td>{{this.Patient_ID}}</td>
+                                            <td>{{this.AppointmentType}}</td>
+                                            <td>{{this.Date}}</td>
+                                            <td>{{this.Time}}</td>
+                                            <td>{{this.PatientReason}}</td>
+                                        
+                                            </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar and Patient Info -->
+                <div class="split-section">
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Calendar</h2>
+                            <span class="section-action">Month</span>
+                        </div>
+                        <div class="card">
+                            <div class="calendar">
+                                <div class="calendar-header">
+                                    <div>March 2025</div>
+                                    <div class="calendar-nav">
+                                        <span>◀</span>
+                                        <span>Today</span>
+                                        <span>▶</span>
+                                    </div>
+                                </div>
+                                <div class="calendar-day">Sun</div>
+                                <div class="calendar-day">Mon</div>
+                                <div class="calendar-day">Tue</div>
+                                <div class="calendar-day">Wed</div>
+                                <div class="calendar-day">Thu</div>
+                                <div class="calendar-day">Fri</div>
+                                <div class="calendar-day">Sat</div>
+                                
+                                <!-- March 2025 days -->
+                                <div class="calendar-date">24</div>
+                                <div class="calendar-date">25</div>
+                                <div class="calendar-date">26</div>
+                                <div class="calendar-date">27</div>
+                                <div class="calendar-date">28</div>
+                                <div class="calendar-date has-event">1</div>
+                                <div class="calendar-date">2</div>
+                                <div class="calendar-date has-event">3</div>
+                                <div class="calendar-date">4</div>
+                                <div class="calendar-date">5</div>
+                                <div class="calendar-date has-event">6</div>
+                                <div class="calendar-date">7</div>
+                                <div class="calendar-date">8</div>
+                                <div class="calendar-date">9</div>
+                                <div class="calendar-date has-event">10</div>
+                                <div class="calendar-date current">11</div>
+                                <div class="calendar-date has-event">12</div>
+                                <div class="calendar-date">13</div>
+                                <div class="calendar-date">14</div>
+                                <div class="calendar-date">15</div>
+                                <div class="calendar-date">16</div>
+                                <div class="calendar-date has-event">17</div>
+                                <div class="calendar-date">18</div>
+                                <div class="calendar-date">19</div>
+                                <div class="calendar-date has-event">20</div>
+                                <div class="calendar-date">21</div>
+                                <div class="calendar-date">22</div>
+                                <div class="calendar-date">23</div>
+                                <div class="calendar-date has-event">24</div>
+                                <div class="calendar-date">25</div>
+                                <div class="calendar-date">26</div>
+                                <div class="calendar-date">27</div>
+                                <div class="calendar-date">28</div>
+                                <div class="calendar-date">29</div>
+                                <div class="calendar-date">30</div>
+                                <div class="calendar-date">31</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Recent Patients</h2>
+                        </div>
+                        <div class="card">
+                            {{#each patients}}
+
+                            <div class="patient-info">
+                                <div class="patient-avatar">🤕</div>
+                                <div>
+                                    <div class="patient-name">{{this.Name}}</div>
+                                    <div class="patient-details">{{this.Gender}} • 18 yrs • {{this.Health_Conditions}} • {{this.Phone}}</div>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <!-- Patients Tab Content -->
+<div class="tab-content" id="patients-content">
+    <div class="card">
+        <div class="section-header">
+            <h2 class="section-title">Patient Management</h2>
+        </div>
+        
+        <!-- Patients Table -->
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Patient ID</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each patients}}
+                    <tr>
+                        <td>{{this.Patient_ID}}</td>
+                        <td>{{this.Name}}</td>
+                        <td>{{this.Age}}</td>
+                        <td>{{this.Gender}}</td>
+                        <td>{{this.Phone}}</td>
+                        <td>{{this.Email}}</td>
+                        <td class="action-buttons">
+                            <button class="btn btn-primary view-patient" data-id="{{this.Patient_ID}}">View</button>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add/Edit Patient Modal -->
+    <div id="patient-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 100;">
+        <div class="modal-content" style="background-color: white; margin: 10% auto; padding: 20px; width: 60%; max-width: 600px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 id="patient-modal-title">Add New Patient</h3>
+                <span id="close-patient-modal" style="cursor: pointer; font-size: 24px;">&times;</span>
+            </div>
+            <form id="patient-form" action="/save_patient" method="POST">
+                <input type="hidden" id="patient-id-input" name="Patient_ID">
+                <div class="form-group">
+                    <label for="patient-name">Full Name:</label>
+                    <input type="text" id="patient-name" name="Name" class="form-control" required>
+                </div>
+                <div class="form-group" style="display: flex; gap: 20px;">
+                    <div style="flex: 1;">
+                        <label for="patient-age">Age:</label>
+                        <input type="number" id="patient-age" name="Age" class="form-control" required>
+                    </div>
+                    <div style="flex: 1;">
+                        <label for="patient-gender">Gender:</label>
+                        <select id="patient-gender" name="Gender" class="form-control" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="patient-phone">Phone:</label>
+                    <input type="tel" id="patient-phone" name="Phone" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="patient-email">Email:</label>
+                    <input type="email" id="patient-email" name="Email" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="patient-address">Address:</label>
+                    <textarea id="patient-address" name="Address" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="patient-medical-history">Medical History:</label>
+                    <textarea id="patient-medical-history" name="MedicalHistory" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Patient</button>
+                    <button type="button" id="cancel-patient" class="btn btn-outline">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Patient Modal -->
+    <div id="view-patient-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 100;">
+        <div class="modal-content" style="background-color: white; margin: 10% auto; padding: 20px; width: 60%; max-width: 600px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3>Patient Details</h3>
+                <span id="close-view-patient-modal" style="cursor: pointer; font-size: 24px;">&times;</span>
+            </div>
+            <div class="patient-details">
+                <div class="profile-info-row">
+                    <div class="profile-label">Patient ID:</div>
+                    <div class="profile-value" id="view-patient-id"></div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-label">Name:</div>
+                    <div class="profile-value" id="view-patient-name"></div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-label">Age:</div>
+                    <div class="profile-value" id="view-patient-age"></div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-label">Gender:</div>
+                    <div class="profile-value" id="view-patient-gender"></div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-label">Phone:</div>
+                    <div class="profile-value" id="view-patient-phone"></div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-label">Email:</div>
+                    <div class="profile-value" id="view-patient-email"></div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-label">Address:</div>
+                    <div class="profile-value" id="view-patient-address"></div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-label">Medical History:</div>
+                    <div class="profile-value" id="view-patient-medical-history"></div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-label">Last Visit:</div>
+                    <div class="profile-value" id="view-patient-last-visit"></div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button id="edit-from-view-patient" class="btn btn-primary">Okay</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- Appointments Tab Content -->
+            <div class="tab-content" id="appointments-content">
+                <div class="card">
+                    <table>
+                    <thead>
+                        <tr>
+                        <td>Appointment ID</td>
+                        <td>Patient Name</td>
+                        <td>Appointment Type</td>
+                        <td>Date</td>
+                        <td>Time</td>
+                        <td>Reason</td>
+                        <td>Confirm</td>
+                        <td>Cancel</td>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                    {{#each result1}}
+                        <tr>
+                        <td>{{this.Appointment_ID}}</td>
+                        <td>{{this.Patient_ID}}</td>
+                        <td>{{this.AppointmentType}}</td>
+                        <td>{{this.Date}}</td>
+                        <td>{{this.Time}}</td>
+                        <td>{{this.PatientReason}}</td>
+                        <form action="/confirm_app/{{this.Appointment_ID}}" method="POST">
+                            <td><button class="btn btn-primary" >confirm</button></td>
+                        </form>
+                        <form action="/cancel_app/{{this.Appointment_ID}}" method="POST">
+                            <td><button class="btn btn-outline" >cancel</button></td>
+                        </form>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                    </table>
+                
+                </div>
+            </div>
+
+                <!-- Medical Records Tab Content -->
+<div class="tab-content" id="records-content">
+    <div class="card">
+        <div class="section-header">
+            <h2 class="section-title">Patient Medical Records</h2>
+            <button id="add-record-btn" class="btn btn-primary">Add New Record</button>
+        </div>
+        
+        <!-- Records Table -->
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Record ID</th>
+                        <th>Patient ID</th>
+                        <th>Date</th>
+                        <th>Diagnosis</th>
+                        <th>Prescriptions</th>
+                        <th style="display: None;">Notes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each result3}}
+                    <tr>
+                        <td>{{this.Record_ID}}</td>
+                        <td>{{this.Patient_ID}}</td>
+                        <td>{{this.Date}}</td>
+                        <td>{{this.Diagnosis}}</td>
+                        <td>{{this.Prescriptions}}</td>
+                        <td style="display: None;">{{this.Notes}}</td>
+                        
+                        <td class="action-buttons">
+                            <button class="btn btn-primary view-record" data-id="{{this.Record_ID}}">View</button>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add/Edit Record Modal -->
+    <div id="record-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 100;">
+        <div class="modal-content" style="background-color: white; margin: 10% auto; padding: 20px; width: 60%; max-width: 600px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 id="modal-title">Add Medical Record</h3>
+                <span id="close-modal" style="cursor: pointer; font-size: 24px;">&times;</span>
+            </div>
+            <form id="record-form" action="/save_medicalrecords_doc/{{this.userId}}" method="POST">
+                <input type="hidden" id="record-id" name="Record_ID">
+                <div class="form-group">
+                    <label for="patient-id">Patient ID:</label>
+                    <input type="number" id="patient-id" name="Patient_ID" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="record-date">Date:</label>
+                    <input type="date" id="record-date" name="Date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="diagnosis">Diagnosis:</label>
+                    <textarea id="diagnosis" name="Diagnosis" class="form-control" rows="2" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="prescriptions">Prescriptions:</label>
+                    <textarea id="prescriptions" name="Prescriptions" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notes:</label>
+                    <textarea id="notes" name="Notes" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Record</button>
+                    
+                    <button type="button" id="cancel-record" class="btn btn-outline">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Record Modal -->
+    <div id="view-record-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 100;">
+        <div class="modal-content" style="background-color: white; margin: 10% auto; padding: 20px; width: 60%; max-width: 600px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3>Medical Record Details</h3>
+                <span id="close-view-modal" style="cursor: pointer; font-size: 24px;">&times;</span>
+            </div>
+            <div class="record-details">
+                <div class="profile-info-row">
+                    <div class="profile-label">Record ID:</div>
+                    <div class="profile-value" id="view-record-id"></div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-label" >Patient ID:</div>
+                    <div class="profile-value" id="view-patient-id"></div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-label">Date:</div>
+                    <div class="profile-value" id="view-date"></div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-label">Diagnosis:</div>
+                    <div class="profile-value" id="view-diagnosis"></div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-label">Prescriptions:</div>
+                    <div class="profile-value" id="view-prescriptions"></div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-label">Notes:</div>
+                    <div class="profile-value" id="view-notes"></div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button id="edit-from-view" class="btn btn-primary">Edit Record</button>
+                <button id="close-view-btn" class="btn btn-outline">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- Prescriptions Tab Content -->
+            <div class="tab-content" id="prescriptions-content">
+                <div class="card">
+                    <h2>Hello Prescriptions</h2>
+                    <p>This is the Prescriptions section. You'll be able to manage all prescriptions from here.</p>
+                    <p>The content for this tab will be developed in the future.</p>
+                </div>
+            </div>
+
+            <!-- Profile Tab Content -->
+            <div class="tab-content" id="profile-content">
+                <div class="card">
+        <div class="section-header">
+            <h2 class="section-title">Doctor Profile</h2>
+            <button id="edit-profile-btn" class="btn btn-primary">Edit Profile</button>
+        </div>
+        
+        <div id="profile-view" class="profile-section">
+            <div class="profile-info-row">
+                <div class="profile-label">Name:</div>
+                <div class="profile-value" id="doctor-name">{{this.result.Name}}</div>
+            </div>
+            <div class="profile-info-row">
+                <div class="profile-label">Specialization:</div>
+                <div class="profile-value" id="doctor-specialization">{{this.result.Specialization}}</div>
+            </div>
+            <div class="profile-info-row">
+                <div class="profile-label">Phone:</div>
+                <div class="profile-value" id="doctor-phone">{{this.result.Phone}}</div>
+            </div>
+            <div class="profile-info-row">
+                <div class="profile-label">Email:</div>
+                <div class="profile-value" id="doctor-email">{{this.result.Email}}</div>
+            </div>
+            <div class="profile-info-row">
+                <div class="profile-label">Availability:</div>
+                <div class="profile-value" id="doctor-availability">
+                    {{this.result.avail}}
+                </div>
+            </div>
+        </div>
+        
+        <div id="profile-edit" class="profile-section" style="display: none;">
+            <form id="profile-form" action="/save_doc_profile/{{this.userId}}" method="POST">
+                <div class="form-group">
+                    <label for="edit-name">Name:</label>
+                    <input type="text" name="name"  id="edit-name" class="form-control" value="{{this.result.Name}}">
+                </div>
+                <div class="form-group">
+                    <label for="edit-specialization">Specialization:</label>
+                    <input type="text" name="specialization" id="edit-specialization" class="form-control" value="{{this.result.Specialization}}">
+                </div>
+                <div class="form-group">
+                    <label for="edit-phone">Phone:</label>
+                    <input type="tel" name="phone" id="edit-phone" class="form-control" value="{{this.result.Phone}}">
+                </div>
+                <div class="form-group">
+                    <label for="edit-email">Email:</label>
+                    <input type="email"  name="email" id="edit-email" class="form-control" value="{{this.result.Email}}">
+                </div>
+                <div class="form-group">
+                    <label for="edit-availability">Availability:</label>
+                    <textarea id="edit-availability" name="avail" class="form-control" rows="4">{{this.result.avail}}</textarea>
+                </div>
+                <div class="form-actions">
+                        <button type="submit" id="save-profile-btn" class="btn btn-primary">Save Changes</button>
+                        <button type="submit" id="cancel-edit-btn" class="btn btn-outline">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    // Elements for record modal
+    const recordModal = document.getElementById('record-modal');
+    const viewRecordModal = document.getElementById('view-record-modal');
+    const addRecordBtn = document.getElementById('add-record-btn');
+    const closeModalBtn = document.getElementById('close-modal');
+    const closeViewModalBtn = document.getElementById('close-view-modal');
+    const cancelRecordBtn = document.getElementById('cancel-record');
+    const closeViewBtn = document.getElementById('close-view-btn');
+    const editFromViewBtn = document.getElementById('edit-from-view');
+    const modalTitle = document.getElementById('modal-title');
+    const recordForm = document.getElementById('record-form');
+    
+    // Show add record modal
+    if (addRecordBtn) {
+        addRecordBtn.addEventListener('click', function() {
+            modalTitle.textContent = 'Add Medical Record';
+            recordForm.reset();
+            document.getElementById('record-id').value = '';
+
+            recordModal.style.display = 'block';
+        });
+    }
+    
+    // Close modals
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', function() {
+            recordModal.style.display = 'none';
+        });
+    }
+    
+    if (closeViewModalBtn) {
+        closeViewModalBtn.addEventListener('click', function() {
+            viewRecordModal.style.display = 'none';
+        });
+    }
+    
+    if (cancelRecordBtn) {
+        cancelRecordBtn.addEventListener('click', function() {
+            recordModal.style.display = 'none';
+        });
+    }
+    
+    if (closeViewBtn) {
+        closeViewBtn.addEventListener('click', function() {
+            viewRecordModal.style.display = 'none';
+        });
+    }
+    
+    // Edit record button event
+    const editBtns = document.querySelectorAll('.edit-record');
+    editBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const recordId = this.getAttribute('data-id');
+            modalTitle.textContent = 'Edit Medical Record';
+            
+            // Fetch record data and populate form (in a real app, this would be an AJAX call)
+            // For demo, we'll simulate getting data from the table row
+            const row = this.closest('tr');
+            document.getElementById('record-id').value = recordId;
+            document.getElementById('patient-id').value = row.cells[1].textContent;
+            document.getElementById('record-date').value = formatDateForInput(row.cells[2].textContent);
+            document.getElementById('diagnosis').value = row.cells[3].textContent;
+            document.getElementById('prescriptions').value = row.cells[4].textContent;
+            // Notes would need to be fetched from backend as they're not displayed in the table
+            
+            recordModal.style.display = 'block';
+        });
+    });
+    
+    // View record button event
+    const viewBtns = document.querySelectorAll('.view-record');
+    viewBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const recordId = this.getAttribute('data-id');
+            
+            // Fetch record data and populate view (in a real app, this would be an AJAX call)
+            // For demo, we'll simulate getting data from the table row
+            const row = this.closest('tr');
+            document.getElementById('view-record-id').textContent = recordId;
+            document.getElementById('view-patient-id').textContent = row.cells[1].textContent;
+            document.getElementById('view-date').textContent = row.cells[2].textContent;
+            document.getElementById('view-diagnosis').textContent = row.cells[3].textContent;
+            document.getElementById('view-prescriptions').textContent = row.cells[4].textContent;
+            document.getElementById('view-notes').textContent = row.cells[5].textContent; // This would come from backend
+            
+            viewRecordModal.style.display = 'block';
+        });
+    });
+    
+    // Edit from view button
+    if (editFromViewBtn) {
+        editFromViewBtn.addEventListener('click', function() {
+            const recordId = document.getElementById('view-record-id').textContent;
+            viewRecordModal.style.display = 'none';
+            
+            // Simulate clicking the edit button for this record
+            document.querySelector(`.edit-record[data-id="${recordId}"]`).click();
+        });
+    }
+    
+    // Close modals when clicking outside
+    window.addEventListener('click', function(event) {
+        if (event.target === recordModal) {
+            recordModal.style.display = 'none';
+        }
+        if (event.target === viewRecordModal) {
+            viewRecordModal.style.display = 'none';
+        }
+    });
+    
+    // Helper function to format date for input
+    function formatDateForInput(dateString) {
+        const date = new Date(dateString);
+        return date.toISOString().split('T')[0];
+    }
+});
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all menu items
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            // Get all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            // Get page title element
+            const pageTitle = document.getElementById('pageTitle');
+            
+            // Add click event to each menu item (except logout)
+            menuItems.forEach(item => {
+                if (item.id !== 'logout') {
+                    item.addEventListener('click', function() {
+                        // Remove active class from all menu items
+                        menuItems.forEach(mi => mi.classList.remove('active'));
+                        
+                        // Add active class to clicked menu item
+                        this.classList.add('active');
+                        
+                        // Get the tab name
+                        const tabName = this.getAttribute('data-tab');
+                        
+                        // Hide all tab contents
+                        tabContents.forEach(tab => tab.classList.remove('active'));
+                        
+                        // Show the selected tab content
+                        document.getElementById(tabName + '-content').classList.add('active');
+                        
+                        // Update page title
+                        pageTitle.textContent = this.querySelector('.menu-text').textContent;
+                    });
+                }
+            });
+            
+
+        });
+         document.addEventListener('DOMContentLoaded', function() {
+        // Profile edit functionality
+        const editProfileBtn = document.getElementById('edit-profile-btn');
+        const saveProfileBtn = document.getElementById('save-profile-btn');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+        const profileView = document.getElementById('profile-view');
+        const profileEdit = document.getElementById('profile-edit');
+        
+        if (editProfileBtn) {
+            editProfileBtn.addEventListener('click', function() {
+                profileView.style.display = 'none';
+                profileEdit.style.display = 'block';
+            });
+        }
+        
+        if (saveProfileBtn) {
+            saveProfileBtn.addEventListener('click', function() {
+                // Get updated values
+                const name = document.getElementById('edit-name').value;
+                const specialization = document.getElementById('edit-specialization').value;
+                const phone = document.getElementById('edit-phone').value;
+                const email = document.getElementById('edit-email').value;
+                const availability = document.getElementById('edit-availability').value;
+                
+                // Update display values
+                document.getElementById('doctor-name').textContent = name;
+                document.getElementById('doctor-specialization').textContent = specialization;
+                document.getElementById('doctor-phone').textContent = phone;
+                document.getElementById('doctor-email').textContent = email;
+                document.getElementById('doctor-availability').innerHTML = availability.replace(/\n/g, '<br>');
+                
+                // Switch back to view mode
+                profileView.style.display = 'block';
+                profileEdit.style.display = 'none';
+            });
+        }
+        
+        if (cancelEditBtn) {
+            cancelEditBtn.addEventListener('click', function() {
+                profileView.style.display = 'block';
+                profileEdit.style.display = 'none';
+            });
+        }
+    });
+    // Patient page functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Elements for patient modal
+    const patientModal = document.getElementById('patient-modal');
+    const viewPatientModal = document.getElementById('view-patient-modal');
+    const addPatientBtn = document.getElementById('add-patient-btn');
+    const closePatientModalBtn = document.getElementById('close-patient-modal');
+    const closeViewPatientModalBtn = document.getElementById('close-view-patient-modal');
+    const cancelPatientBtn = document.getElementById('cancel-patient');
+    const closeViewPatientBtn = document.getElementById('close-view-patient-btn');
+    const editFromViewPatientBtn = document.getElementById('edit-from-view-patient');
+    const patientModalTitle = document.getElementById('patient-modal-title');
+    const patientForm = document.getElementById('patient-form');
+    
+    // Show add patient modal
+    if (addPatientBtn) {
+        addPatientBtn.addEventListener('click', function() {
+            patientModalTitle.textContent = 'Add New Patient';
+            patientForm.reset();
+            document.getElementById('patient-id-input').value = '';
+            patientModal.style.display = 'block';
+        });
+    }
+    
+    // Close modals
+    if (closePatientModalBtn) {
+        closePatientModalBtn.addEventListener('click', function() {
+            patientModal.style.display = 'none';
+        });
+    }
+    
+    if (closeViewPatientModalBtn) {
+        closeViewPatientModalBtn.addEventListener('click', function() {
+            viewPatientModal.style.display = 'none';
+        });
+    }
+    
+    if (cancelPatientBtn) {
+        cancelPatientBtn.addEventListener('click', function() {
+            patientModal.style.display = 'none';
+        });
+    }
+    
+    if (closeViewPatientBtn) {
+        closeViewPatientBtn.addEventListener('click', function() {
+            viewPatientModal.style.display = 'none';
+        });
+    }
+    
+    // Edit patient button event
+    const editPatientBtns = document.querySelectorAll('.edit-patient');
+    editPatientBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const patientId = this.getAttribute('data-id');
+            patientModalTitle.textContent = 'Edit Patient';
+            
+            // Fetch patient data and populate form
+            const row = this.closest('tr');
+            document.getElementById('patient-id-input').value = patientId;
+            document.getElementById('patient-name').value = row.cells[1].textContent;
+            document.getElementById('patient-age').value = row.cells[2].textContent;
+            
+            // Set gender dropdown
+            const genderSelect = document.getElementById('patient-gender');
+            const genderValue = row.cells[3].textContent;
+            for(let i = 0; i < genderSelect.options.length; i++) {
+                if(genderSelect.options[i].value === genderValue) {
+                    genderSelect.selectedIndex = i;
+                    break;
+                }
+            }
+            
+            document.getElementById('patient-phone').value = row.cells[4].textContent;
+            document.getElementById('patient-email').value = row.cells[5].textContent;
+            
+            // Address and Medical History would need to be fetched from backend
+            // as they're not displayed in the table
+            
+            patientModal.style.display = 'block';
+        });
+    });
+    
+    // View patient button event
+    const viewPatientBtns = document.querySelectorAll('.view-patient');
+    viewPatientBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const patientId = this.getAttribute('data-id');
+            
+            // Fetch patient data and populate view
+            const row = this.closest('tr');
+            document.getElementById('view-patient-id').textContent = patientId;
+            document.getElementById('view-patient-name').textContent = row.cells[1].textContent;
+            document.getElementById('view-patient-age').textContent = row.cells[2].textContent;
+            document.getElementById('view-patient-gender').textContent = row.cells[3].textContent;
+            document.getElementById('view-patient-phone').textContent = row.cells[4].textContent;
+            document.getElementById('view-patient-email').textContent = row.cells[5].textContent;
+            document.getElementById('view-patient-last-visit').textContent = row.cells[6].textContent;
+            
+            // Address and Medical History would need to be fetched from backend
+            // In a real implementation, you would make an AJAX call here
+            document.getElementById('view-patient-address').textContent = 'Fetching from backend...';
+            document.getElementById('view-patient-medical-history').textContent = 'Fetching from backend...';
+            
+            viewPatientModal.style.display = 'block';
+        });
+    });
+    
+    // Edit from view button
+    if (editFromViewPatientBtn) {
+        editFromViewPatientBtn.addEventListener('click', function() {
+            const patientId = document.getElementById('view-patient-id').textContent;
+            viewPatientModal.style.display = 'none';
+            
+            // Find and click the edit button for this patient
+            const editBtn = document.querySelector(`.edit-patient[data-id="${patientId}"]`);
+            if (editBtn) {
+                editBtn.click();
+            }
+        });
+    }
+    
+    // Close modals when clicking outside
+    window.addEventListener('click', function(event) {
+        if (event.target === patientModal) {
+            patientModal.style.display = 'none';
+        }
+        if (event.target === viewPatientModal) {
+            viewPatientModal.style.display = 'none';
+        }
+    });
+});
+    </script>
+</body>
+</html>

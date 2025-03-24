@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="utf-8" />
+    <title>Patient Dashboard</title>
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous"
+    />
+    <style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  background-color: #f8f9fa !important;
+  border-bottom: 3px solid #17a2b8;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  color: #17a2b8 !important;
+}
+
+.navbar-nav .nav-link {
+  font-size: 16px;
+  color: #333 !important;
+  transition: transform 0.2s ease-in-out, color 0.2s;
+}
+
+.navbar-nav .nav-link:hover {
+  transform: scale(1.1);
+  color: #17a2b8 !important;
+}
+
+.btn-primary {
+  background-color: #17a2b8 !important;
+  border-color: #17a2b8 !important;
+  padding: 5px 10px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: #f9f9f9;
+}
+
+/* Main Header (Exact match to image) */
+.main-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 0;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+}
+
+.logo {
+  color: #0ea5e9; /* Exact Medicare Hospital blue color */
+  font-weight: bold;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.main-nav ul {
+  display: flex;
+  list-style: none;
+}
+
+.main-nav li {
+  margin: 0 15px;
+}
+
+.main-nav a {
+  text-decoration: none;
+  color: #333;
+  padding: 5px 0;
+  font-size: 0.9rem;
+}
+
+.main-nav a.active {
+  color: #000;
+  font-weight: 500;
+}
+
+.logout-btn {
+  background-color: #dc2626; /* Exact red color from image */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* Blue Bar (Exact match) */
+.blue-bar {
+  height: 8px;
+  background-color: #0066cc; /* Exact blue color from image */
+  width: 100%;
+}
+
+/* Original Header now renamed to content-header */
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.content-header h1 {
+  font-size: 1.5rem;
+  color: #2d3748;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.notification {
+  position: relative;
+  cursor: pointer;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #e53e3e;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+}
+
+.notification::before {
+  content: "🔔";
+  font-size: 1.2rem;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  background-color: #3182ce;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.username {
+  color: #4a5568;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.records-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.records-header h2 {
+  font-size: 1.25rem;
+  color: #2d3748;
+}
+
+.add-record-btn {
+  background-color: #3182ce;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.add-record-btn:hover {
+  background-color: #2b6cb0;
+}
+
+.table-container {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.records-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.records-table th {
+  text-align: left;
+  padding: 1rem;
+  background-color: #f7fafc;
+  color: #4a5568;
+  font-weight: normal;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.records-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  color: #4a5568;
+}
+
+.view-btn {
+  background-color: #3182ce;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.3rem 1rem;
+  cursor: pointer;
+}
+
+.view-btn:hover {
+  background-color: #2b6cb0;
+}
+
+/* Hidden class for general use */
+.hidden {
+  display: none !important; /* Ensure hidden elements are not displayed */
+}
+
+/* Modal Window Styles - From medical-records-css-fix.css */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: auto;
+}
+
+.modal-content {
+  background-color: white;
+  margin: 10% auto;
+  width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.modal-header {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header h2 {
+  font-size: 1.25rem;
+  color: #2d3748;
+  font-weight: 500;
+}
+
+.close-btn {
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #718096;
+}
+
+.close-btn:hover {
+  color: #2d3748;
+}
+
+.modal-body {
+  padding: 1rem;
+}
+
+.record-detail {
+  display: flex;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.record-detail:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  width: 35%;
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.detail-value {
+  width: 65%;
+  color: #2d3748;
+}
+
+.modal-footer {
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.edit-btn {
+  background-color: #3182ce;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.close-modal-btn {
+  background-color: #e2e8f0;
+  color: #4a5568;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.edit-btn:hover {
+  background-color: #2b6cb0;
+}
+
+.close-modal-btn:hover {
+  background-color: #cbd5e0;
+}
+
+/* Additional overlay class for modal functionality */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+  z-index: 500;
+}
+
+    </style>
+    </head>
+    <body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/patient_dash/{{this.userId}}">MEDICARE HOSPITAL</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/patient_dash/{{this.userId}}">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/patient_appointments/{{this.userId}}">Appointments</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/patient_medical_Record/{{this.user.id}}">Medical Records</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/patient_billing/{{this.userId}}">Billing</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/patient_appointments/patient_profile/{{this.userId}}">Profile</a>
+              </li>
+            </ul>
+            <div class="d-flex ms-auto">
+                <form action="/logout" method="GET">
+                     <button class="btn btn-danger">Logout</button>
+                </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+    <main class="container">
+        <div class="records-header">
+            <h2>Patient Medical Records</h2>
+        </div>
+
+        <div class="table-container">
+            <table class="records-table">
+                <thead>
+                    <tr>
+                        <th>Record ID</th>
+                        <th>Doctor Name</th>
+                        <th>Patient ID</th>
+                        <th>Date</th>
+                        <th>Diagnosis</th>
+                        <th>Prescriptions</th>
+                        <th style="display: none;">Prescriptions</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each result}}
+                    <tr>
+                        <td>{{this.Record_ID}}</td>
+                        <td>{{this.Doctor_Name}}</td>
+                        <td>{{this.Patient_ID}}</td>
+                        <td>{{this.Date}} </td>
+                        <td>{{this.Diagnosis}}</td>
+                        <td>{{this.Prescriptions}}</td>
+                        <td style="display: none;">{{this.Notes}}</td>
+                        <td><button class="view-btn">View</button></td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Modal Popup -->
+    <div id="recordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Medical Record Details</h2>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="record-detail">
+                    <div class="detail-label">Record ID:</div>
+                    <div class="detail-value" id="modal-record-id">2</div>
+                </div>
+                <div class="record-detail">
+                    <div class="detail-label">Doctor Name:</div>
+                    <div class="detail-value" id="modal-doctor-id">2</div>
+                </div>
+                <div class="record-detail">
+                    <div class="detail-label">Patient ID:</div>
+                    <div class="detail-value" id="modal-patient-id">17</div>
+                </div>
+                <div class="record-detail">
+                    <div class="detail-label">Date:</div>
+                    <div class="detail-value" id="modal-date">Thu Mar 13 2025 00:00:00 GMT+0530 (India Standard Time)</div>
+                </div>
+                <div class="record-detail">
+                    <div class="detail-label">Diagnosis:</div>
+                    <div class="detail-value" id="modal-diagnosis">222</div>
+                </div>
+                <div class="record-detail">
+                    <div class="detail-label">Prescriptions:</div>
+                    <div class="detail-value" id="modal-prescriptions">222</div>
+                </div>
+                <div class="record-detail">
+                    <div class="detail-label">Notes:</div>
+                    <div class="detail-value" id="modal-notes">{{result.Notes}}</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="close-modal-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+    // Get the modal
+    const modal = document.getElementById('recordModal');
+    
+    // Get all view buttons
+    const viewBtns = document.querySelectorAll('.view-btn');
+    
+    // Get the close button elements
+    const closeBtn = document.querySelector('.close-btn');
+    const closeModalBtn = document.querySelector('.close-modal-btn');
+    
+    // Get the edit button
+    const editBtn = document.querySelector('.edit-btn');
+    
+    // Get the "Add New Record" button
+    const addRecordBtn = document.querySelector('.add-record-btn');
+
+    // Add click event to all view buttons
+    viewBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Get the data from the table row
+            const row = this.closest('tr');
+            const recordId = row.cells[0].textContent;
+            const docotr_name = row.cells[1].textContent;
+            const patientId = row.cells[2].textContent;
+            const date = row.cells[3].textContent;
+            const diagnosis = row.cells[4].textContent;
+            const prescriptions = row.cells[5].textContent;
+            const Notes = row.cells[6].textContent;
+
+            
+            // Set the data in the modal
+            document.getElementById('modal-record-id').textContent = recordId;
+            document.getElementById('modal-doctor-id').textContent =docotr_name;
+            document.getElementById('modal-patient-id').textContent = patientId;
+            document.getElementById('modal-date').textContent = date;
+            document.getElementById('modal-diagnosis').textContent = diagnosis;
+            document.getElementById('modal-prescriptions').textContent = prescriptions;
+            document.getElementById('modal-notes').textContent = Notes; // Example notes
+            
+            // Show the modal
+            modal.style.display = 'block';
+        });
+    });
+    
+    // Close the modal when clicking the (x) button
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+    
+    // Close the modal when clicking the Close button
+    closeModalBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+    
+    // Edit button click event
+    editBtn.addEventListener('click', function() {
+        alert('Edit functionality will be implemented here');
+    });
+    
+    // Add New Record button click event
+    addRecordBtn.addEventListener('click', function() {
+        alert('Add new record functionality will be implemented here');
+    });
+    
+    // Close the modal when clicking outside of it
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+    
+    // Example function to add a new record to the table (for demonstration)
+    function addNewRecord(recordId, docotr_name,patientId, date, diagnosis, prescriptions) {
+        const tableBody = document.querySelector('.records-table tbody');
+        const newRow = document.createElement('tr');
+        
+        newRow.innerHTML = `
+            <td>${recordId}</td>
+            <td>${docotr_name}</td>
+            <td>${patientId}</td>
+            <td>${date}</td>
+            <td>${diagnosis}</td>
+            <td>${prescriptions}</td>
+            <td><button class="view-btn">View</button></td>
+        `;
+        
+        tableBody.appendChild(newRow);
+        
+        // Add event listener to the new view button
+        const newViewBtn = newRow.querySelector('.view-btn');
+        newViewBtn.addEventListener('click', function() {
+            const row = this.closest('tr');
+            const recordId = row.cells[0].textContent;
+            const docotr_name = row.cells[1].textContent;
+            const patientId = row.cells[2].textContent;
+            const date = row.cells[3].textContent;
+            const diagnosis = row.cells[4].textContent;
+            const prescriptions = row.cells[5].textContent;
+            const Notes = row.cells[6].textContent;
+
+            
+            // Set the data in the modal
+            document.getElementById('modal-record-id').textContent = recordId;
+            document.getElementById('modal-doctor-id').textContent =docotr_name;
+            document.getElementById('modal-patient-id').textContent = patientId;
+            document.getElementById('modal-date').textContent = date;
+            document.getElementById('modal-diagnosis').textContent = diagnosis;
+            document.getElementById('modal-prescriptions').textContent = prescriptions;
+            document.getElementById('modal-notes').textContent = Notes; // Example notes
+            
+            // Show the modal
+            modal.style.display = 'block';
+        });
+    }
+});
+
+
+    </script>
+</body>
+</html>

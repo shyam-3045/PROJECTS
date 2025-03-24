@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Appointments | City Hospital</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/css/appointment.css" />
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/patient_dash/{{this.user.id}}">MEDICARE
+          HOSPITAL</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                aria-current="page"
+                href="/patient_dash/{{this.user.id}}"
+              >Home</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="/patient_appointments/{{this.user.id}}"
+              >Appointments</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="/patient_medical_Record/{{this.user.id}}"
+              >Medical Records</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="/patient_billing/{{this.user.id}}"
+              >Billing</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="/patient_appointments/patient_profile/{{this.user.id}}"
+              >Profile</a>
+            </li>
+          </ul>
+          <div class="d-flex ms-auto">
+            <a href="/logout" class="btn btn-danger">Logout</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HEADER -->
+    <div class="header">
+      <h1>My Appointments</h1>
+      <p>Manage your upcoming and past appointments</p>
+    </div>
+
+    <div class="dashboard-container">
+      <!-- Sidebar Navigation -->
+      <div class="sidebar">
+        <div class="patient-info">
+          <h3>{{this.user.name}}</h3>
+          <p>Patient ID: {{this.user.id}}</p>
+          <p>Last visit: Feb 15, 2025</p>
+        </div>
+      </div>
+
+      <!-- SCHEDULE APPOINTMENT MODAL WINDOW -->
+      <div class="modal hidden">
+        <button class="close-modal">&times;</button>
+        <div class="card p-4">
+          <h3 class="text-primary mb-3">Appointment Details</h3>
+
+          <form action="/appointment_booked/{{this.user.id}}" method="POST">
+            <div class="row g-3">
+              <!-- Department -->
+              <div class="col-md-6">
+                <label class="form-label">Department
+                  <span class="text-danger">*</span></label>
+                <select class="form-select" name="department" required>
+                  <option selected disabled>Select Department...</option>
+                  <option value="Dermatology">Dermatology</option>
+                  <option value="Cardiology">Cardiology</option>
+                  <option value="Neurology">Neurology</option>
+                </select>
+              </div>
+
+              <!-- Doctor -->
+              <div class="col-md-6">
+                <label class="form-label">Preferred Doctor
+                  <span class="text-danger">*</span></label>
+                <select class="form-select" name="doctor" required>
+                  {{#each doctors}}
+                  <option value="{{this.Name}}">{{this.Name}}</option>
+
+                  {{/each}}
+                  
+                </select>
+              </div>
+
+              <!-- Date -->
+              <div class="col-md-6">
+                <label class="form-label">Preferred Date
+                  <span class="text-danger">*</span></label>
+                <input type="date" class="form-control" name="date" required />
+              </div>
+
+              <!-- Time -->
+              <div class="col-md-6">
+                <label class="form-label">Preferred Time
+                  <span class="text-danger">*</span></label>
+                <select class="form-select" name="time" required>
+                  <option selected disabled>Select Time...</option>
+                  <option value="09:00 AM">09:00 AM</option>
+                  <option value="10:00 AM">10:00 AM</option>
+                </select>
+              </div>
+
+              <!-- Appointment Type -->
+              <div class="col-md-6">
+                <label class="form-label">Appointment Type
+                  <span class="text-danger">*</span></label>
+                <select class="form-select" name="appointmentType" required>
+                  <option selected disabled>Select Type...</option>
+                  <option value="General Checkup">General Checkup</option>
+                  <option value="Follow-up">Follow-up</option>
+                </select>
+              </div>
+
+              <!-- Reason for Visit -->
+              <div class="col-md-12">
+                <label class="form-label">Reason for Visit / Symptoms</label>
+                <textarea
+                  class="form-control"
+                  rows="3"
+                  name="reason"
+                  placeholder="Describe your symptoms..."
+                ></textarea>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="col-md-12 text-center">
+                <button class="btn btn-primary mt-3" type="submit">Book
+                  Appointment</button>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+      <!-- Overlay -->
+      <div class="overlay hidden"></div>
+
+      <!-- Main Content Area -->
+      <div class="main-content">
+        <button class="new-appointment">Schedule New Appointment</button>
+
+        <!-- Appointment Tabs -->
+        <div class="appointment-tabs">
+          <div class="tab active" onclick="switchTab(this, 'upcoming')">
+            Upcoming
+          </div>
+          <div class="tab" onclick="switchTab(this, 'past')">
+            Past Appointments
+          </div>
+          <div class="tab" onclick="switchTab(this, 'cancelled')">
+            Cancelled
+          </div>
+        </div>
+        <!-- Upcoming Appointments Section -->
+        <div id="upcoming" class="appointments-section">
+          {{#each uppcommingResult}}
+            <!-- Appointment Card -->
+            <div class="appointment-card">
+              <div class="appointment-header">
+                <div class="appointment-date">
+                  {{this.Date}}
+                  •
+                  {{this.Time}}
+                </div>
+                <div
+                  class="appointment-status status-confirmed"
+                >{{this.Status}}</div>
+              </div>
+
+              <div class="appointment-details">
+                <div class="appointment-detail">
+                  <div class="detail-label">Department</div>
+                  <div class="detail-value">{{this.DepartmentName}}</div>
+                </div>
+
+                <div class="appointment-detail">
+                  <div class="detail-label">Doctor</div>
+                  <div class="detail-value">{{this.DoctorName}}</div>
+                </div>
+
+                <div class="appointment-detail">
+                  <div class="detail-label">Appointment Type</div>
+                  <div class="detail-value">{{this.AppointmentType}}</div>
+                </div>
+
+                <div class="appointment-detail">
+                  <div class="detail-label">Patient ID</div>
+                  <div class="detail-value">{{this.Patient_ID}}</div>
+                </div>
+              </div>
+
+              {{#if this.PatientReason}}
+                <div class="appointment-notes">
+                  <div class="detail-label">Appointment Notes</div>
+                  <p>{{this.PatientReason}}</p>
+                </div>
+              {{/if}}
+
+              <div class="appointment-actions">
+
+                <form action="/delete-appointment" method="POST">
+                  <input
+                    type="hidden"
+                    name="appointment_id"
+                    value="{{this.Appointment_ID}}"
+                  />
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+
+        <!-- Past Appointments Section (Hidden initially) -->
+        <div id="past" class="appointments-section hidden">
+          {{#each PreviousResult}}
+            <!-- Appointment Card -->
+            <div class="appointment-card">
+              <div class="appointment-header">
+                <div class="appointment-date">
+                  {{this.Date}}
+                  •
+                  {{this.Time}}
+                </div>
+                <div
+                  class="appointment-status status-confirmed"
+                >{{this.Status}}</div>
+              </div>
+
+              <div class="appointment-details">
+                <div class="appointment-detail">
+                  <div class="detail-label">Department</div>
+                  <div class="detail-value">{{this.DepartmentName}}</div>
+                </div>
+
+                <div class="appointment-detail">
+                  <div class="detail-label">Doctor</div>
+                  <div class="detail-value">{{this.DoctorName}}</div>
+                </div>
+
+                <div class="appointment-detail">
+                  <div class="detail-label">Appointment Type</div>
+                  <div class="detail-value">{{this.AppointmentType}}</div>
+                </div>
+
+                <div class="appointment-detail">
+                  <div class="detail-label">Patient ID</div>
+                  <div class="detail-value">{{this.Patient_ID}}</div>
+                </div>
+              </div>
+
+              {{#if this.PatientReason}}
+                <div class="appointment-notes">
+                  <div class="detail-label">Appointment Notes</div>
+                  <p>{{this.PatientReason}}</p>
+                </div>
+              {{/if}}
+
+              <div class="appointment-actions">
+
+                <form action="/delete-appointment" method="POST">
+                  <input
+                    type="hidden"
+                    name="appointment_id"
+                    value="{{this.Appointment_ID}}"
+                  />
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+
+        <!-- Cancelled Appointments Section (Hidden initially) -->
+        <div id="cancelled" class="appointments-section hidden">
+          <!-- Appointment Card - Cancelled -->
+          {{#each cancelled}}
+            <!-- Appointment Card -->
+            <div class="appointment-card">
+              <div class="appointment-header">
+                <div class="appointment-date">
+                  {{this.Date}}
+                  •
+                  {{this.Time}}
+                </div>
+                <div
+                  class="appointment-status status-confirmed"
+                >{{this.Status}}</div>
+              </div>
+
+              <div class="appointment-details">
+                <div class="appointment-detail">
+                  <div class="detail-label">Department</div>
+                  <div class="detail-value">{{this.DepartmentName}}</div>
+                </div>
+
+                <div class="appointment-detail">
+                  <div class="detail-label">Doctor</div>
+                  <div class="detail-value">{{this.DoctorName}}</div>
+                </div>
+
+                <div class="appointment-detail">
+                  <div class="detail-label">Appointment Type</div>
+                  <div class="detail-value">{{this.AppointmentType}}</div>
+                </div>
+
+                <div class="appointment-detail">
+                  <div class="detail-label">Patient ID</div>
+                  <div class="detail-value">{{this.Patient_ID}}</div>
+                </div>
+              </div>
+
+              {{#if this.PatientReason}}
+                <div class="appointment-notes">
+                  <div class="detail-label">Appointment Notes</div>
+                  <p>{{this.PatientReason}}</p>
+                </div>
+              {{/if}}
+
+              <div class="appointment-actions">
+
+                <form action="/delete-appointment" method="POST">
+                  <input
+                    type="hidden"
+                    name="appointment_id"
+                    value="{{this.Appointment_ID}}"
+                  />
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/js/pat_appointment.js"></script>
+  </body>
+</html>
